@@ -11,24 +11,25 @@ try:
 		beanList = []
 		def __init__(self):
 			self.isfull = False
-			self.board = [
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "],
+			self.board =[
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "],
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "],
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "],
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "],
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "],
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "],
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "],
-
-					["   ","   ","   ","   ","   ","   ","   ","   ","   "]]
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+						
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]]
+						]
 		
 			
 		'''
@@ -37,17 +38,18 @@ try:
 			self.board[self.x][self.y] = self.board[inX][inY]
 			self.board[inX][inY] = _
 		'''
+		
 		def __str__(self):
-			line = '=======================================================\n'
+			line = '=========================================================================\n'
 			i = '' + line
 			for _ in self.board:
 				a = '| '
 				for __ in _ :
-					a = a + str(__) + ' | '
+					a = a + str(__[0])+','+str(__[1]) + ' | '
 				i = i + a + '\n' + line
 			#i = i + '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-='
 			return i
-
+		
 		def placeNewBean(self):
 			while True:
 				randx = random.randint(0,8)
@@ -58,9 +60,10 @@ try:
 				#print(randcolor)
 				newbean = bean(randx,randy,randcolor)
 				
-				if self.board[randx][randy] == "   ":
+				if self.board[randx][randy][0] == "   ":
 					self.beanList.append(newbean)
-					self.board[randx][randy] = newbean.color
+					self.board[randx][randy] = (newbean.color, 1)
+					#print(self)
 					self.update()
 					break
 				else:
@@ -70,14 +73,21 @@ try:
 			for bean in beanList:
 				if bean.x == inx and bean.y == iny :
 					self.beanList.pop(self.beanList.index(bean))
-					self.board[bean.x][bean.y] = "   "
+					self.board[bean.x][bean.y] = ["   ", 0]
 			self.update()
 
 		def update(self):
+			print(self)
 			if len(self.beanList) == 81:
 				self.isfull = True
 			else:
 				self.infull = False
+				for _ in self.beanList:
+					_.grow()
+					self.board[_.x][_.y] = [_.color,_.state]
+
+
+
 	class bean:
 		#constructor
 		def __init__(self,inx,iny,incolor):
@@ -86,19 +96,20 @@ try:
 			self.state = 1
 			self.color = incolor #random color 
 		#grow
-		def grow():
+		def grow(self):
 			if self.state < 3:
 				self.state += 1
-
-	a = board()
 	
-	'''
-	while not a.isfull:
+	a = board()
+	print(a)
+	#print(len(a.board))
+	
+	while True:
 		clearConsole()
 		a.placeNewBean()
-		print(a)
-		#time.sleep(0.5)
-	'''
+		#print(a)
+		time.sleep(0.2)
+	
 
 
 	
