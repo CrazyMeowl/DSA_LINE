@@ -1,16 +1,16 @@
 try:
 	import pygame
+	from pygame import mixer
 	import random
 	import time
 	import os
 
-	def clearConsole():
-		 os.system("cls")
+	
 	class board:
-		colorList = ['red','gre','blu','yel','bro','pin']# all the color of the beans
+		colorList = ['bro','red','yel','gre','blu','pur']# all the color of the beans
 		beanList = []
 		def __init__(self):
-			self.isfull = False
+			self.isfull = False	
 			self.board =[
 						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
@@ -38,7 +38,8 @@ try:
 			self.board[self.x][self.y] = self.board[inX][inY]
 			self.board[inX][inY] = _
 		'''
-		
+		def clearConsole(self):
+		 os.system("cls")
 		def __str__(self):
 			line = '=========================================================================\n'
 			i = '' + line
@@ -48,10 +49,15 @@ try:
 					a = a + str(__[0])+','+str(__[1]) + ' | '
 				i = i + a + '\n' + line
 			#i = i + '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-='
+			#for j in self.board:
+			#	print(j)
+			#print(self.board)
 			return i
 		
 		def placeNewBean(self):
-			while True:
+
+			while not self.isfull:
+				print('try to place')
 				randx = random.randint(0,8)
 				#print(randx)
 				randy = random.randint(0,8)
@@ -60,33 +66,36 @@ try:
 				#print(randcolor)
 				newbean = bean(randx,randy,randcolor)
 				
-				if self.board[randx][randy][0] == "   ":
+				if self.board[randy][randx][0] == "   ":
 					self.beanList.append(newbean)
-					self.board[randx][randy] = (newbean.color, 1)
-					#print(self)
-					self.update()
-					break
+					self.board[randy][randx] = [newbean.color, 1]
+					#print(self)	
+					done = 1
 				else:
-					pass
+					done = 0
+				if done :
+					break
 
-		def removeBean(self,inx,iny):
-			for bean in beanList:
+		def removeBean(self,iny,inx):
+			for bean in self.beanList:
 				if bean.x == inx and bean.y == iny :
 					self.beanList.pop(self.beanList.index(bean))
-					self.board[bean.x][bean.y] = ["   ", 0]
-			self.update()
+					self.board[bean.y][bean.x] = ["   ", 0]
+			print('removed')
 
 		def update(self):
-			print(self)
+			#print(self)
 			if len(self.beanList) == 81:
+				print('Full')
 				self.isfull = True
 			else:
-				self.infull = False
+				self.isfull = False
 				for _ in self.beanList:
 					_.grow()
-					self.board[_.x][_.y] = [_.color,_.state]
+					self.board[_.y][_.x] = [_.color,_.state]
 
-
+		def swap(self,bean1,bean2):
+			bean1.x,bean1.y,bean2.x,bean2.y=bean2.x,bean2.y,bean1.x,bean1.y
 
 	class bean:
 		#constructor
@@ -94,12 +103,25 @@ try:
 			self.x = inx
 			self.y = iny
 			self.state = 1
-			self.color = incolor #random color 
+			self.color = incolor #random color
+			if incolor == "bro":
+				self.colorid = 0
+			elif incolor == "red":
+				self.colorid = 1
+			elif incolor == "yel":
+				self.colorid = 2
+			elif incolor == "gre":
+				self.colorid = 3
+			elif incolor == "blu":
+				self.colorid = 4
+			elif incolor == "pur":
+				self.colorid = 5
+			
 		#grow
 		def grow(self):
-			if self.state < 3:
+			if self.state < 2:
 				self.state += 1
-	
+	'''
 	a = board()
 	print(a)
 	#print(len(a.board))
@@ -109,7 +131,7 @@ try:
 		a.placeNewBean()
 		#print(a)
 		time.sleep(0.2)
-	
+	'''	
 
 
 	
