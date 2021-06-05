@@ -4,8 +4,8 @@ try:
 	import random
 	import time
 	import os
+	from bnbfunc import *
 
-	
 	class board:
 		colorList = ['bro','red','yel','gre','blu','pur']# all the color of the beans
 		beanList = []
@@ -40,6 +40,7 @@ try:
 		'''
 		def clearConsole(self):
 		 os.system("cls")
+
 		def __str__(self):
 			line = '=========================================================================\n'
 			i = '' + line
@@ -55,33 +56,40 @@ try:
 			return i
 		
 		def placeNewBean(self):
+			i = 0
+			while i < 4:
+				while not self.isfull:
+					#print('try to place')
+					randx = random.randint(0,8)
+					#print(randx)
+					randy = random.randint(0,8)
+					#print(randy)
+					randcolor = random.choice(self.colorList)
+					#print(randcolor)
+					newbean = bean(randx,randy,randcolor)
+					
+					if self.board[randy][randx][0] == "   ":
+						self.beanList.append(newbean)
+						self.board[randy][randx] = [newbean.color, 1]
 
-			while not self.isfull:
-				print('try to place')
-				randx = random.randint(0,8)
-				#print(randx)
-				randy = random.randint(0,8)
-				#print(randy)
-				randcolor = random.choice(self.colorList)
-				#print(randcolor)
-				newbean = bean(randx,randy,randcolor)
-				
-				if self.board[randy][randx][0] == "   ":
-					self.beanList.append(newbean)
-					self.board[randy][randx] = [newbean.color, 1]
-					#print(self)	
-					done = 1
-				else:
-					done = 0
-				if done :
-					break
+						if len(self.beanList) == 81:
+							print('Full')
+							self.isfull = True
+						else:
+							self.isfull = False
 
+						done = 1
+					else:
+						done = 0
+					if done :
+						break
+				i += 1
 		def removeBean(self,iny,inx):
 			for bean in self.beanList:
 				if bean.x == inx and bean.y == iny :
 					self.beanList.pop(self.beanList.index(bean))
 					self.board[bean.y][bean.x] = ["   ", 0]
-			print('removed')
+			#print('removed')
 
 		def update(self):
 			#print(self)
@@ -96,7 +104,9 @@ try:
 
 		def swap(self,bean1,bean2):
 			bean1.x,bean1.y,bean2.x,bean2.y=bean2.x,bean2.y,bean1.x,bean1.y
-
+		def printboard(self):
+			for _ in self.board:
+				print(_)
 	class bean:
 		#constructor
 		def __init__(self,inx,iny,incolor):
@@ -121,20 +131,6 @@ try:
 		def grow(self):
 			if self.state < 2:
 				self.state += 1
-	'''
-	a = board()
-	print(a)
-	#print(len(a.board))
-	
-	while True:
-		clearConsole()
-		a.placeNewBean()
-		#print(a)
-		time.sleep(0.2)
-	'''	
-
-
-	
 ## for bug and print out bug (only for compile error or runtime error) [ DO NOT FIX ]
 except Exception as Bug:
 	print("game.py:",Bug)

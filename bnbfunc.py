@@ -72,14 +72,14 @@ def findnextpath(coord,board):
 		if board[Y - 1][X] == 0:
 			nextpath.append((Y-1,X))
 	if X+1 >= 0 and X+1 <=8:
-		if board[Y][X + 1] == 0:
+		if board[Y][X + 1] == 0: 
 			nextpath.append((Y,X + 1))
 	if X-1 >= 0 and X-1 <=8:
 		if board[Y][X - 1] == 0:
 			nextpath.append((Y,X - 1))
 	return nextpath
 
-def createtempboard(board):
+def createtempboard(board): #tempboard for pathfinding
 	tempboard = []
 	for i in board :
 		tempi = []
@@ -92,6 +92,44 @@ def createtempboard(board):
 				tempi.append(1)
 		tempboard.append(tempi)
 	return tempboard
+
+def createtempboard2(board): #tempboard for color checking
+	tempboard = []
+	for i in board :
+		tempi = []
+		for _ in i:
+
+			if _[1] == 0 or _[1] == 1:
+				tempi.append('   ')
+
+			elif _[1] == 2 :
+				tempi.append(_[0])
+		tempboard.append(tempi)
+	return tempboard
+
+def searchdupe(inList):
+	counter = 0
+	for i,j in groupby(inList):
+		length = len(list(j))
+		print('index: ',counter,i,length)
+		if length >= 5:
+			index = counter
+			indexcounter = index + length
+			newlist = []
+			for i in range(index,indexcounter):
+				newlist.append(i)
+			return newlist 
+		counter += length
+
+def awd(inList,inObj):
+	if inObj != None:
+		if inObj not in inList:
+			inList.append(inObj)
+			return 1
+		else:
+			return 0
+	else:
+		return 0
 '''
 tempboard = createtempboard(board)
 for i in tempboard:

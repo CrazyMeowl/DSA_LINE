@@ -9,35 +9,9 @@ from bnbfunc import *
 height = 500
 width = 600
 
-def drawloop():
-	i = 0
-	j = 0
-	x = 38
-	y = 165
-	img = Image.open('bg5x6.png')
-	draw = ImageDraw.Draw(img)
-	while i < 11:
-		
-		shape = [(0,x),(599,x)]
-		draw.line(shape, fill ="red", width = 0)
-		x = x + 47
-		#img.show()
-		i = i + 1
-	#img.save("test.png")
-
-	#img = Image.open('test.png')
-
-	draw = ImageDraw.Draw(img)
-
-	while j < 11:
-		
-		shape = [(y,0),(y,499)]
-		draw.line(shape, fill ="red", width = 0)
-		y = y + 47
-		#img.show()
-		j = j + 1
-	img.save("test.png")
-
+class mice:
+	def __init__(self):
+		self.state = None
 
 
 def mainloop():
@@ -88,7 +62,7 @@ def mainloop():
 			if event.type == pygame.QUIT:
 				quit()
 			elif event.type == pygame.MOUSEBUTTONDOWN:
-				mainboard.update()
+				mainboard.update()   #UPDATE part is here
 				mainboard.clearConsole()
 				x,y = pygame.mouse.get_pos()
 				if(x >= 165 and x <= 164+47*9 and y>=41 and y <= 40+47*9):
@@ -101,10 +75,10 @@ def mainloop():
 				print(row,col)
 				#mainboard.removeBean(col,row)
 				mainboard.placeNewBean()
-				mainboard.removeBean(row,col)
+				#mainboard.removeBean(row,col)
 
-				print(mainboard)
-		
+				#	print(mainboard)
+				mainboard.printboard()
 		draw(surface,mainboard)
 		pygame.display.flip()
 		clock.tick(clock_tick_rate)
