@@ -3,6 +3,8 @@ import numpy as np
 def searchdupe(inList):
 	counter = 0
 	for i,j in groupby(inList):
+		print(i)
+		print(j)
 		length = len(list(j))
 		
 		if length >= 5:
@@ -28,15 +30,25 @@ def awd(inList,inObj):
 		return 0
 
 
-board =[[['gre', 2], ['red', 2], ['red', 2], ['blu', 2], ['yel', 2], ['red', 2], ['gre', 2], ['bro', 2], ['gre', 2]],
-		[['gre', 2], ['gre', 2], ['   ', 0], ['yel', 2], ['yel', 2], ['blu', 2], ['bro', 2], ['blu', 2], ['pur', 2]],
-		[['pur', 2], ['bro', 2], ['pur', 2], ['bro', 2], ['yel', 2], ['blu', 2], ['red', 2], ['blu', 2], ['yel', 2]],
-		[['   ', 0], ['blu', 2], ['gre', 2], ['gre', 2], ['yel', 2], ['blu', 2], ['bro', 2], ['blu', 2], ['yel', 2]],
-		[['blu', 2], ['red', 2], ['   ', 0], ['pur', 2], ['pur', 2], ['yel', 2], ['bro', 2], ['yel', 2], ['bro', 2]],
-		[['blu', 2], ['bro', 1], ['   ', 0], ['bro', 2], ['gre', 2], ['gre', 2], ['bro', 2], ['bro', 2], ['blu', 2]],
-		[['gre', 2], ['pur', 2], ['yel', 2], ['bro', 2], ['bro', 2], ['blu', 2], ['bro', 2], ['pur', 2], ['blu', 2]],
-		[['   ', 0], ['bro', 2], ['bro', 2], ['bro', 2], ['bro', 2], ['bro', 2], ['bro', 2], ['red', 2], ['yel', 2]],
-		[['yel', 2], ['pur', 2], ['pur', 2], ['gre', 2], ['red', 2], ['gre', 2], ['   ', 0], ['   ', 0], ['blu', 2]]]
+board =[
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
+
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
+
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
+		
+		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]]
+		]
 
 def createtempboard2(board):
 	tempboard = []
@@ -55,10 +67,13 @@ def createtempboard2(board):
 def printboard(board):
 			for _ in board:
 				print(_)
+
 def removelist(inBoard,inList):
 	for y,x in inList:
-		print(inBoard[y][x])
-
+		remove(inBoard,(y,x))
+def remove(board,coord):
+	y,x = coord
+	board[y][x] = ["   ",0]
 def checkboard(inboard):
 	board = createtempboard2(inboard)
 	vlist = []
@@ -77,16 +92,17 @@ def checkboard(inboard):
 	diags2 = [a.diagonal(i) for i in range(a.shape[1]-1,-a.shape[0],-1)]
 	dlist1 = [n.tolist() for n in diags]
 	dlist2 = [n.tolist() for n in diags2]
-	'''
+	
 	print('hlist')
 	printboard(hlist)
 	print('vlist')
 	printboard(vlist)
 	print('dlist1')
 	printboard(dlist1)
+	
 	print('dlist2')
 	printboard(dlist2)
-	'''
+	
 	removelist = []
 	rowcounter = 0
 	colcounter = 0
@@ -103,7 +119,47 @@ def checkboard(inboard):
 			for ele in _:
 				awd(removelist,(ele,colcounter))
 		colcounter += 1
+
+	linecounter = 0
+	for line in dlist1:
+		if linecounter <= 8:
+			startx = 0
+			starty = linecounter
+		else:
+			startx = linecounter - 8
+			starty = 8
+		#print(starty,startx)
+		_ = searchdupe(line)
+		if _ != None:
+			for ele in _:
+				#print("Remove")
+				y = starty - ele
+				x = startx + ele
+				awd(removelist,(y,x))			
+		linecounter +=1
+	
+	linecounter = 0
+	for line in dlist2:
+		if linecounter <= 8:
+			startx = 8 - linecounter
+			starty = 0
+		else:
+			startx = 0
+			starty = linecounter - 8
+		print(starty,startx)
+		_ = searchdupe(line)
+		if _ != None:
+			
+			for ele in _:
+				#print("Remove")
+				print(ele)
+				y = starty + ele
+				x = startx + ele
+				print((y,x))
+				awd(removelist,(y,x))			
+		linecounter +=1
 	print(removelist)
 	return removelist
 
 removelist(board,checkboard(board))
+printboard(board)

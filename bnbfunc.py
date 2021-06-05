@@ -1,3 +1,4 @@
+from itertools import groupby
 '''
 board =[
 		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
@@ -110,15 +111,18 @@ def createtempboard2(board): #tempboard for color checking
 def searchdupe(inList):
 	counter = 0
 	for i,j in groupby(inList):
+		#print(i)
 		length = len(list(j))
-		print('index: ',counter,i,length)
-		if length >= 5:
-			index = counter
-			indexcounter = index + length
-			newlist = []
-			for i in range(index,indexcounter):
-				newlist.append(i)
-			return newlist 
+		#print('index: ',counter,i,length)
+		if i != "   ":
+			if length >= 5:
+
+				index = counter
+				indexcounter = index + length
+				newlist = []
+				for i in range(index,indexcounter):
+					newlist.append(i)
+				return newlist 
 		counter += length
 
 def awd(inList,inObj):

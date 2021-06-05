@@ -1,5 +1,5 @@
 
-
+import numpy as np
 import pygame
 import math
 from PIL import Image,ImageFont,ImageDraw
@@ -72,13 +72,14 @@ def mainloop():
 					col = -1
 					row = -1
 
-				print(row,col)
+				#print(row,col)
 				#mainboard.removeBean(col,row)
+				mainboard.checkBoard()
 				mainboard.placeNewBean()
 				#mainboard.removeBean(row,col)
 
 				#	print(mainboard)
-				mainboard.printboard()
+				printBoard(mainboard.board)
 		draw(surface,mainboard)
 		pygame.display.flip()
 		clock.tick(clock_tick_rate)
