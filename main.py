@@ -9,10 +9,29 @@ from bnbfunc import *
 height = 500
 width = 600
 
+def printf(hehe):
+	print(hehe)
+
 class mice:
 	def __init__(self):
 		self.state = None
+		self.selected = None
+		self.col = -1
+		self.row = -1
+		self.coord = (self.row,self.col)
+	def select(self):
+		self.selected = self.coord
 
+	def get(self):
+		x,y = pygame.mouse.get_pos()
+		if(x >= 165 and x <= 164+47*9 and y>=41 and y <= 40+47*9):
+			self.col = math.floor((x-166)/47)
+			self.row = math.floor((y-42)/47)
+			self.coord = (self.row,self.col)
+		else:
+			self.col = -1
+			self.row = -1
+			self.coord = (self.row,self.col)
 
 def mainloop():
 	def draw(surface,mainboard):
@@ -52,15 +71,43 @@ def mainloop():
 	smoblu = pygame.image.load("Resources/smoblu.png")
 	smopur = pygame.image.load("Resources/smopur.png")
 
-	clock_tick_rate=20
+	FPS = 20
 	clock = pygame.time.Clock()
 	mainboard = board()
-
+	mouse = mice()
+	update = False
+	i = 0
 	while True:
 		
 		for event in pygame.event.get():
+
 			if event.type == pygame.QUIT:
+				printf('hehe')
 				quit()
+
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				mainboard.clearConsole()
+				mouse.get()
+				print(mainboard)
+				if mouse.coord	!= (-1,-1):
+					if mouse.state == None:
+						if mainboard.get(mouse.coord)[1] == 2:
+							mouse.select()
+							mouse.state = "move"
+							#print('Selected: ',mouse.selected)
+					elif mouse.state == "move":
+						if canpath(mouse.selected,mouse.coord,mainboard.board):
+							mainboard.move(mouse.selected,mouse.coord)
+							mouse.state = None
+							#print('moved')
+							update = True
+						else:
+							mouse.state = None
+						i += 1
+					mainboard.checkBoard()
+					
+				
+			'''
 			elif event.type == pygame.MOUSEBUTTONDOWN:
 				mainboard.update()   #UPDATE part is here
 				mainboard.clearConsole()
@@ -80,9 +127,21 @@ def mainloop():
 
 				#	print(mainboard)
 				printBoard(mainboard.board)
+			'''
+			
+		if update == True:
+			mainboard.update()
+			mainboard.placeNewBean()
+			update = False
+		if i == 5:
+			mainboard.restart()
+			i = 0
 		draw(surface,mainboard)
 		pygame.display.flip()
-		clock.tick(clock_tick_rate)
+		clock.tick(FPS)
+
 #drawloop()
 
 mainloop()
+
+

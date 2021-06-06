@@ -11,7 +11,7 @@ try:
 				print(_)
 	class board:
 		colorList = ['bro','red','yel','gre','blu','pur']# all the color of the beans
-		colorList = ['red']
+		#colorList = ['red']
 		beanList = []
 		def __init__(self):
 			self.point = 0
@@ -35,7 +35,9 @@ try:
 						
 						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]]
 						]
-		
+			self.placeNewBean()
+			self.update()
+			self.placeNewBean()
 			
 		'''
 		def swap(self,inX,inY):
@@ -60,6 +62,18 @@ try:
 			#print(self.board)
 			return i
 		
+
+		def move(self,in1,in2):
+			startY,startX = in1
+			endY,endX = in2
+			if self.board[endY][endX][1] == 1:
+				self.removeBean(endY,endX)
+			self.board[startY][startX] = ["   ",0]
+			for bean in self.beanList:
+				if bean.y == startY and bean.x == startX :
+					bean.y,bean.x = endY,endX
+					self.board[endY][endX] = [bean.color,2]
+
 		def placeNewBean(self):
 			i = 0
 			while i < 3:
@@ -103,13 +117,13 @@ try:
 			for bean in self.beanList:
 				if bean.x == inx and bean.y == iny :
 					self.beanList.pop(self.beanList.index(bean))
-					self.board[bean.y][bean.x] = ["   ", 0]
+					self.board[iny][inx] = ["   ", 0]
 			#print('removed')
 
 		def update(self):
 			#print(self)
 			if len(self.beanList) == 81:
-				print('Full')
+				#print('Full')
 				self.isfull = True
 			else:
 				self.isfull = False
@@ -206,6 +220,34 @@ try:
 			#print(removelist)
 			#return removelist
 			self.removeList(removelist)
+		def get(self,coord):
+			y,x = coord
+			return self.board[y][x]
+		def restart(self):
+			self.point = 0
+			board.beanList = []
+			self.board =[
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
+						
+						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]]
+						]
+			self.placeNewBean()
+			self.update()
+			self.placeNewBean()
 	class bean:
 		#constructor
 		def __init__(self,inx,iny,incolor):

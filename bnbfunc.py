@@ -1,27 +1,10 @@
 from itertools import groupby
-'''
-board =[
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
 
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
-
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
-
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
-
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
-
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
-
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]],
-		
-		[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",2],["   ",0]]
-		]
-'''
-
-def canpath(startY,startX,endY,endX,board):
+def canpath(in1,in2,inboard):
+	board = createtempboard(inboard)
+	startY,startX = in1
+	endY,endX = in2
 	count = 0
 	for i in board:
 		for j in i:
@@ -58,9 +41,10 @@ def canpath(startY,startX,endY,endX,board):
 
 		if afternextlist == []:
 			return False
-		if iteration > 16:
-			return False
-			break
+
+		#if iteration > 16:
+		#	return False
+		#	break
 	return True
 
 def findnextpath(coord,board):

@@ -1,2 +1,0 @@
-python bnbfunc.py
-pause
