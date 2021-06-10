@@ -6,14 +6,51 @@ try:
 	import time
 	import os
 	from bnbfunc import *
+
+
+	class DSAstack:
+		def __init__(self):
+			self.list = []
+			self.len = 0
+		def push(self,inObj):
+			self.list.append(inObj)
+			self.len = self.len + 1
+			print(self.len)
+		def top(self):
+			return self.list[self.len-1]
+		def pop(self):
+			self.len = self.len -1
+		def __str__(self):
+			_ = ''
+			for __ in self.list :
+				_ = _+ '[' + str(__) + ']'
+			
+			return _
+
 	def printBoard(board):
 			for _ in board:
 				print(_)
+
+	## BOARD CLASS
 	class board:
 		colorList = ['bro','red','yel','gre','blu','pur']# all the color of the beans
 		#colorList = ['red']
 		beanList = []
 		def __init__(self):
+			self.font = pygame.font.SysFont('Arial',30)
+			self.mixer = mixer
+			self.mixer.music.load('Resources/Sound/background.mp3')
+			self.mixer.music.set_volume(0.25)
+			self.plantSound = mixer.Sound('Resources/Sound/plantAPlant.ogg')
+			self.plantSound.set_volume(0.2)
+			self.shovelSound = mixer.Sound('Resources/Sound/shovel.ogg')	
+			self.seedSound = mixer.Sound('Resources/Sound/seedSelect.ogg')
+			self.pauseSound = mixer.Sound('Resources/Sound/pause.ogg')
+			self.winSound = mixer.Sound('Resources/Sound/winMusic.ogg')
+			self.loseSound = mixer.Sound('Resources/Sound/loseMusic.ogg')
+			self.sunAddSound = mixer.Sound('Resources/Sound/addSun.ogg')
+			self.sunAddSound.set_volume(0.25)
+			self.startLevelSound = mixer.Sound('Resources/Sound/startLevel.ogg')
 			self.point = 0
 			self.isfull = False	
 			self.board =[
@@ -35,16 +72,14 @@ try:
 						
 						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]]
 						]
-			self.placeNewBean()
+
+
+			self.placeNewBean() 
 			self.update()
-			self.placeNewBean()
-			
-		'''
-		def swap(self,inX,inY):
-			_ = self.board[self.x][self.y] 
-			self.board[self.x][self.y] = self.board[inX][inY]
-			self.board[inX][inY] = _
-		'''
+			self.placeNewBean() # add 6 start bean
+
+		def backgroundMusic(self):
+			self.mixer.music.play(-1)
 		def clearConsole(self):
 		 os.system("cls")
 
@@ -56,10 +91,7 @@ try:
 				for __ in _ :
 					a = a + str(__[0])+','+str(__[1]) + ' | '
 				i = i + a + '\n' + line
-			#i = i + '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-=-='
-			#for j in self.board:
-			#	print(j)
-			#print(self.board)
+			
 			return i
 		
 
@@ -101,6 +133,7 @@ try:
 					else:
 						done = 0
 					if done :
+						self.seedSound.play()
 						break
 				i += 1
 		def removeList(self,inList):
@@ -108,11 +141,13 @@ try:
 				self.removeBean(y,x)
 
 			addpoint = len(inList)
-			if addpoint != 5:
+			if addpoint > 5:
 				self.point += addpoint*2
-			else:
+				self.sunAddSound.play()
+			elif addpoint == 5:
 				self.point += 5
-			print(self.point)
+				self.sunAddSound.play()
+			#print(self.point)
 		def removeBean(self,iny,inx):
 			for bean in self.beanList:
 				if bean.x == inx and bean.y == iny :
@@ -130,6 +165,10 @@ try:
 				for _ in self.beanList:
 					_.grow()
 					self.board[_.y][_.x] = [_.color,_.state]
+
+		def updatePoint(self):
+			pointLabel = self.font.render(str(self.point),1,(0,0,0))
+			return pointLabel
 
 		def swap(self,bean1,bean2):
 			bean1.x,bean1.y,bean2.x,bean2.y=bean2.x,bean2.y,bean1.x,bean1.y
@@ -245,9 +284,13 @@ try:
 						
 						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]]
 						]
-			self.placeNewBean()
+			# restart the game board
 			self.update()
 			self.placeNewBean()
+			self.update()
+			self.placeNewBean() # add 6 start bean
+
+	## BEAN CLASS
 	class bean:
 		#constructor
 		def __init__(self,inx,iny,incolor):
