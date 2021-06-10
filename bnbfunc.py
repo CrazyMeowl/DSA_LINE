@@ -1,5 +1,7 @@
 try:
 	from itertools import groupby
+
+	# Bố ơi mình đâu thế. 
 	def canpath(in1,in2,inboard):
 		board = createtempboard(inboard)
 		startY,startX = in1
@@ -46,6 +48,7 @@ try:
 			#	break
 		return True
 
+		# Mở rộng đường đi 
 	def findnextpath(coord,board):
 		(Y,X) = coord
 		nextpath = []

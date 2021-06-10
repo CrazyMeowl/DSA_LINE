@@ -8,6 +8,7 @@ try:
 	from bnbfunc import *
 
 
+	'''
 	class DSAstack:
 		def __init__(self):
 			self.list = []
@@ -26,11 +27,12 @@ try:
 				_ = _+ '[' + str(__) + ']'
 			
 			return _
+	'''
 
+	# In ra màn hình 2D list.
 	def printBoard(board):
 			for _ in board:
 				print(_)
-
 	## BOARD CLASS
 	class board:
 		colorList = ['bro','red','yel','gre','blu','pur']# all the color of the beans
@@ -38,8 +40,9 @@ try:
 		beanList = []
 		def __init__(self):
 			self.font = pygame.font.SysFont('Arial',30)
+			# Âm thanh ** 
 			self.mixer = mixer
-			self.mixer.music.load('Resources/Sound/background.mp3')
+			self.mixer.music.load('Resources/Sound/background.mp3') 
 			self.mixer.music.set_volume(0.25)
 			self.plantSound = mixer.Sound('Resources/Sound/plantAPlant.ogg')
 			self.plantSound.set_volume(0.2)
@@ -51,8 +54,11 @@ try:
 			self.sunAddSound = mixer.Sound('Resources/Sound/addSun.ogg')
 			self.sunAddSound.set_volume(0.25)
 			self.startLevelSound = mixer.Sound('Resources/Sound/startLevel.ogg')
+			# Điểm 
 			self.point = 0
-			self.isfull = False	
+			# Đầy bảng
+			self.isfull = False
+			# Tạo board
 			self.board =[
 						[["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0],["   ",0]],
 
@@ -78,11 +84,13 @@ try:
 			self.update()
 			self.placeNewBean() # add 6 start bean
 
+		# backgroundMusic
 		def backgroundMusic(self):
 			self.mixer.music.play(-1)
 		def clearConsole(self):
 		 os.system("cls")
 
+		# to string function: biến object thành string
 		def __str__(self):
 			line = '=========================================================================\n'
 			i = '' + line
@@ -94,7 +102,7 @@ try:
 			
 			return i
 		
-
+		# Di chuyển 1 hạt tới địa điểm **
 		def move(self,in1,in2):
 			startY,startX = in1
 			endY,endX = in2
@@ -106,6 +114,7 @@ try:
 					bean.y,bean.x = endY,endX
 					self.board[endY][endX] = [bean.color,2]
 
+		# Tạo ra 3 hạt mới ở vị trí ngẫu nhiên **
 		def placeNewBean(self):
 			i = 0
 			while i < 3:
@@ -119,6 +128,7 @@ try:
 					#print(randcolor)
 					newbean = bean(randx,randy,randcolor)
 					
+					# Check ở vị trí ngẫu nhiên có hạt hay chưa
 					if self.board[randy][randx][0] == "   ":
 						self.beanList.append(newbean)
 						self.board[randy][randx] = [newbean.color, 1]
@@ -136,6 +146,8 @@ try:
 						self.seedSound.play()
 						break
 				i += 1
+
+		# Xóa nhiều hạt từ list: Khi xếp thành 1 hàng sẽ biến mất và cộng điểm 
 		def removeList(self,inList):
 			for y,x in inList:
 				self.removeBean(y,x)
@@ -145,9 +157,10 @@ try:
 				self.point += addpoint*2
 				self.sunAddSound.play()
 			elif addpoint == 5:
-				self.point += 5
+				self.point += 10
 				self.sunAddSound.play()
 			#print(self.point)
+
 		def removeBean(self,iny,inx):
 			for bean in self.beanList:
 				if bean.x == inx and bean.y == iny :
@@ -155,6 +168,7 @@ try:
 					self.board[iny][inx] = ["   ", 0]
 			#print('removed')
 
+		# Cập nhật:
 		def update(self):
 			#print(self)
 			if len(self.beanList) == 81:
@@ -164,8 +178,7 @@ try:
 				self.isfull = False
 				for _ in self.beanList:
 					_.grow()
-					self.board[_.y][_.x] = [_.color,_.state]
-
+					self.board[_.y][_.x] = [_.color,_.state]				
 		def updatePoint(self):
 			pointLabel = self.font.render(str(self.point),1,(0,0,0))
 			return pointLabel
@@ -173,16 +186,17 @@ try:
 		def swap(self,bean1,bean2):
 			bean1.x,bean1.y,bean2.x,bean2.y=bean2.x,bean2.y,bean1.x,bean1.y
 		
+		# Check thẳng hàng, xóa hạt và cộng điểm **
 		def checkBoard(self):
 			board = createtempboard2(self.board)
-			vlist = []
-			hlist = []
-			
-			for i in range(0,9):
-				hlist.append(board[i])
-				newlist = []
-				for j in range(0,9):
-					newlist.append(board[j][i])
+			vlist = [] # vlist: list  hàng dọc (col)
+			hlist = [] # hlist: list  hàng ngang (row)
+		###
+			for i in range(0,9): 		# cho i từ 0 - 9
+				hlist.append(board[i]) 	# thêm những hàng ngang của bảng 
+				newlist = []			
+				for j in range(0,9): 	# cho j từ 0 - 9
+					newlist.append(board[j][i]) # thêm từng element 
 				vlist.append(newlist)
 
 			
@@ -191,7 +205,9 @@ try:
 			diags2 = [a.diagonal(i) for i in range(a.shape[1]-1,-a.shape[0],-1)]
 			dlist1 = [n.tolist() for n in diags]
 			dlist2 = [n.tolist() for n in diags2]
-			
+		###
+
+
 			#print('hlist')
 			#printBoard(hlist)
 			#print('vlist')
@@ -290,7 +306,7 @@ try:
 			self.update()
 			self.placeNewBean() # add 6 start bean
 
-	## BEAN CLASS
+	## BEAN CLASS **
 	class bean:
 		#constructor
 		def __init__(self,inx,iny,incolor):
@@ -311,7 +327,7 @@ try:
 			elif incolor == "pur":
 				self.colorid = 5
 			
-		#grow
+		#grow **
 		def grow(self):
 			if self.state < 2:
 				self.state += 1
